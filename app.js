@@ -1,6 +1,36 @@
 'use strict';
 document.getElementById('year').textContent = new Date().getFullYear();
 const canvas = document.getElementById('network');
+const themeToggle = document.getElementById('theme-toggle');
+const themeMeta = document.getElementById('theme-color-meta');
+function getThemeColors() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return isDark
+    ? { lineRgb: '94,234,212', dotRgba: 'rgba(94,234,212,.55)', meta: '#0c0e11' }
+    : { lineRgb: '15,118,110', dotRgba: 'rgba(15,118,110,.45)', meta: '#f8f7f4' };
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+  if (themeMeta) themeMeta.setAttribute('content', getThemeColors().meta);
+  if (typeof draw === 'function' && points) draw();
+}
+
+if (themeMeta) themeMeta.setAttribute('content', getThemeColors().meta);
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  if (!localStorage.getItem('theme')) {
+    applyTheme(e.matches ? 'dark' : 'light');
+  }
+});
 const ctx = canvas.getContext('2d');
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 let width, height, points, animation, visible = true;
@@ -14,14 +44,15 @@ function resize() {
   draw();
 }
 function draw() {
+  const { lineRgb, dotRgba } = getThemeColors();
   ctx.clearRect(0, 0, width, height);
   points.forEach((p, i) => {
     if (!reduced.matches) {p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > width) p.vx *= -1; if (p.y < 0 || p.y > height) p.vy *= -1;}
     for (let j = i + 1; j < points.length; j++) {
       const q = points[j], d = Math.hypot(p.x - q.x, p.y - q.y);
-      if (d < 185) {ctx.beginPath(); ctx.strokeStyle = `rgba(105,223,195,${(1 - d / 185) * .35})`; ctx.lineWidth = .7; ctx.moveTo(p.x, p.y);ctx.lineTo(q.x, q.y);ctx.stroke();}
+      if (d < 185) {ctx.beginPath(); ctx.strokeStyle = `rgba(${lineRgb},${(1 - d / 185) * .35})`; ctx.lineWidth = .7; ctx.moveTo(p.x, p.y);ctx.lineTo(q.x, q.y);ctx.stroke();}
     }
-    ctx.beginPath();ctx.arc(p.x,p.y,1.6,0,Math.PI*2);ctx.fillStyle='rgba(105,223,195,.55)';ctx.fill();
+    ctx.beginPath();ctx.arc(p.x,p.y,1.6,0,Math.PI*2);ctx.fillStyle=dotRgba;ctx.fill();
   });
 }
 function tick() {if (visible && !reduced.matches) draw(); animation = requestAnimationFrame(tick);}
