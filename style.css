@@ -214,29 +214,21 @@ header { gap: 22px; }
     box-sizing: border-box;
 }
 
-/* Senior Software Engineer — muted description */
-.timeline article:first-of-type .role-description {
-    color: var(--muted);
-}
-
-/* Software Engineer — lighter, muted description */
-.timeline article:nth-of-type(2) .role-description {
-    color: var(--muted);
-}
-
-/* Proper bullet list structure and spacing */
-.timeline article ul {
-    margin: 24px 0 0;
-    padding-left: 24px;
-}
-
-/* Consistent bullet spacing */
-.timeline article li {
-    padding-left: 0;
-    margin-bottom: 8px;
-}
-
-/* Keep role description spacing consistent */
+/* Muted description color for both roles */
 .timeline article .role-description {
     margin-top: 24px;
+    color: var(--muted);
+}
+
+/* Flush left alignment with paragraph above */
+.timeline article ul {
+    margin: 24px 0 0;
+    padding-left: 16px; /* Aligns bullet dots flush with the left edge of the text above; use 0 if using list-style-position: inside */
+}
+
+/* Muted text color & zero vertical gap between bullets */
+.timeline article li {
+    color: var(--muted);
+    padding-left: 0;
+    margin-bottom: 0;
 }
