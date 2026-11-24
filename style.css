@@ -208,9 +208,9 @@ header { gap: 22px; }
    EXPERIENCE TIMELINE
    ========================================= */
 
-/* Keep both experience entries aligned */
+/* Reduce left gap between the vertical timeline line and the content */
 .timeline article {
-    padding-left: 44px;
+    padding-left: 20px;
     box-sizing: border-box;
 }
 
@@ -223,7 +223,7 @@ header { gap: 22px; }
 /* Flush left alignment with paragraph above */
 .timeline article ul {
     margin: 24px 0 0;
-    padding-left: 16px; /* Aligns bullet dots flush with the left edge of the text above; use 0 if using list-style-position: inside */
+    padding-left: 16px;
 }
 
 /* Muted text color & zero vertical gap between bullets */
